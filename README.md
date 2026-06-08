@@ -1,3 +1,5 @@
+![CI/CD](https://github.com/juanjosolerg/sultanes/actions/workflows/ci-cd.yml/badge.svg)
+
 # Sultanes Nazaríes de Granada
 
 Aplicación web Flask que muestra información sobre los emires y sultanes nazaríes de Granada.
