@@ -1,0 +1,72 @@
+name: JAPON
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest 
+    
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Ptyhon
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      
+      - name: run dependecies
+        run: pip install -r requirements.txt
+        
+      - name: ejercutar tests
+        run: pytest tests/ -v --tb=short --junitxml=report.xml
+      - name: subir reportes
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-report
+          path: report.xml
+  build-and-push:
+      runs-on: ubuntu-latest 
+    
+      permissions:
+        contents: read
+        packages: write
+      steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Extraer Docker metadatos
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/sultanes
+          tags: |
+            type=raw,value=latest
+            type=raw,value=${{ github.sha }}
+
+      
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64, linux/arm64
