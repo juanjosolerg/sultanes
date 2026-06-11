@@ -1,4 +1,4 @@
-![CI/CD](https://github.com/juanjosolerg/sultanes/actions/workflows/ci-cd.yml/badge.svg)
+[![JAPON](https://github.com/juanjosolerg/sultanes/actions/workflows/japon.yml/badge.svg)](https://github.com/juanjosolerg/sultanes/actions/workflows/japon.yml)
 
 # Sultanes Nazaríes de Granada
 
