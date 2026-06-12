@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  settings.ini: |                           # Archivo de configuración (montado como volumen)
+    [app]
+    title = Mi app de Examen
+    author = JUANJO
